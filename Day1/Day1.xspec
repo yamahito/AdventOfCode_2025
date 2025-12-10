@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description 
+  xmlns:x="http://www.jenitennison.com/xslt/xspec"
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  xmlns:a="https://github.com/yamahito/AdventOfCode_2025"
+  run-as="external"
+  stylesheet="Day1.xsl">
+  
+  <x:param name="input_url" as="xs:string" select="'test_input.txt'"/>
+  
+  <x:scenario label="WHEN running the initial template">
+    <x:call template="xsl:initial-template"/>
+    <x:expect label="THEN Output a `dial` root element with a zeros attribute">
+      <dial zeros="...">...</dial>
+    </x:expect>
+    <x:scenario label="GIVEN a set of rotations">
+      <x:param name="rotations" select="(10, -62, 1, 1)"/>
+      <x:expect label="THEN expect the sequence of rotations" as="element()*" test="dial/*">
+        <rotation start="50" rotation="R10" end="60"/>
+        <rotation start="60" rotation="L62" end="98"/>
+        <rotation start="98" rotation="R1" end="99"/>
+        <rotation start="99" rotation="R1" end="0"/>
+      </x:expect>
+      <x:expect label="THEN expect 1 0">
+        <dial zeros="1">...</dial>
+      </x:expect>
+    </x:scenario>
+    <x:scenario label="GIVEN the test_input">
+      <x:expect label="THEN return the expected number of 0s (3)">
+        <dial zeros="3">...</dial>
+      </x:expect>
+    </x:scenario>
+  </x:scenario>
+  
+  <x:scenario label="WHEN running the import_input function">
+    <x:call function="a:import_input"/>
+    <x:scenario label="GIVEN a bogus URL" catch="yes">
+      <x:call>
+        <x:param name="URL" select="'ho_ho_ho'"/>
+      </x:call>
+      <x:expect label="THEN throw an error" test="$x:result?err?code = xs:QName('bad_input')"/>
+    </x:scenario>
+    <x:scenario label="GIVEN the test input document">
+      <x:call>
+        <x:param name="URL" select="$input_url"/>
+      </x:call>
+      <x:expect label="THEN return a list of integers (L negative, R positive)" select="(-68, -30, 48, -5, 60, -55, -1, -99, 14, -82)"/>
+    </x:scenario>
+  </x:scenario>
+  
+  <x:scenario label="WHEN running the rotation-to-integer function">
+    <x:call function="a:rotation-to-integer"/>
+    <x:scenario label="GIVEN a bogus input eg 'W41'" catch="yes">
+      <x:call>
+        <x:param name="rotation" select="'W41'"/>
+      </x:call>
+      <x:expect label="THEN throw an error" test="$x:result?err?code = xs:QName('not_rotation')"/>
+    </x:scenario>
+    <x:scenario label="GIVEN a left rotation eg L99">
+      <x:call>
+        <x:param name="rotation" select="'L99'"/>
+      </x:call>
+      <x:expect label="THEN return the integer -99" select="-99"/>
+    </x:scenario>
+    <x:scenario label="GIVEN a right rotation eg R67">
+      <x:call>
+        <x:param name="rotation" select="'R67'"/>
+      </x:call>
+      <x:expect label="THEN return the integer 67" select="67"/>
+    </x:scenario>
+  </x:scenario>
+  
+  <x:scenario label="WHEN running the integer-to-rotation function">
+    <x:call function="a:integer-to-rotation"/>
+    <x:scenario label="GIVEN a positive integer eg 99">
+      <x:call>
+        <x:param name="integer" select="99"/>
+      </x:call>
+      <x:expect label="THEN return eg R99" select="'R99'"/>
+    </x:scenario>
+    <x:scenario label="GIVEN a negative integer eg -67">
+      <x:call>
+        <x:param name="integer" select="-67"/>
+      </x:call>
+      <x:expect label="THEN return eg L67" select="'L67'"/>
+    </x:scenario>
+  </x:scenario>
+  
+  <x:scenario label="WHEN running the make-rotation-positive function">
+    <x:call function="a:make-rotation-positive"/>
+    <x:scenario label="GIVEN a positive rotation eg 67">
+      <x:call>
+        <x:param name="rotation" select="67"/>
+      </x:call>
+      <x:expect label="THEN return the integer unchanged" select="67"/>
+    </x:scenario>
+    <x:scenario label="GIVEN a negative rotation eg -98">
+      <x:call>
+        <x:param name="rotation" select="xs:integer(-98)"/>
+      </x:call>
+      <x:expect label="THEN add 100 to it to make it positive" select="2"/>
+    </x:scenario>
+    <x:scenario label="GIVEN a massively negative rotation eg -627">
+      <x:call>
+        <x:param name="rotation" select="-627"/>
+      </x:call>
+      <x:expect label="THEN keep adding 100 until it is positive!" select="73"/>
+    </x:scenario>
+  </x:scenario>
+  
+</x:description>
