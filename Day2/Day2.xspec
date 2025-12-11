@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  xmlns:x="http://www.jenitennison.com/xslt/xspec"
+  xmlns:a="https://github.com/yamahito/AdventOfCode_2025"
+  stylesheet="Day2.xsl"
+  run-as="external">
+
+  <x:param name="input" as="xs:string" select="'11-22,95-115,998-1012,1188511880-1188511890,222220-222224,
+    1698522-1698528,446443-446449,38593856-38593862,565653-565659,
+    824824821-824824827,2121212118-2121212124'"/>
+  
+  <x:scenario label="WHEN calling the default template">
+    <x:call template="xsl:initial-template"/>
+    <x:scenario label="GIVEN the test $input parameter">
+      <x:expect label="THEN output a ranges element with the sum of all incorrect product codes">
+        <ranges sum="1227775554">...</ranges>
+      </x:expect>
+      <x:expect label="THEN output a range for each range with start, end, and sum numbers" as="element()" test="/ranges/range[1]">
+        <range start="11" end="22" sum="33">...</range>
+      </x:expect>
+      <x:expect label="THEN output each invalid code as an element" as="element()*" test="/ranges/range[1]/invalid">
+        <invalid code="11"/>
+        <invalid code="22"/>
+      </x:expect>
+      <x:expect label="THEN output the 4th range" test="/ranges/range[4]">
+        <range start="1188511880" end="1188511890" sum="1188511885">
+          <invalid code="1188511885"/>
+        </range>
+      </x:expect>
+      <x:expect label="THEN output 11 ranges in total" test="count(/ranges/range) = 11"/>
+    </x:scenario>
+  </x:scenario>
+
+</x:description>
