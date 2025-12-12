@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  xmlns:math="http://www.w3.org/2005/xpath-functions/math"
+  xmlns:a="https://github.com/yamahito/AdventOfCode_2025"
+  stylesheet="Day3.xsl"
+  run-as="external">
+  
+  <x:scenario label="WHEN calling the intial template">
+    <x:call template="xsl:initial-template"/>
+    <x:scenario label="GIVEN the example input">
+      <x:param name="input" select="(
+          '987654321111111',
+          '811111111111119',
+          '234234234234278',
+          '818181911112111'
+        )"/>
+      <x:expect label="THEN output a power element with a joltage attribute">
+        <power joltage="...">...</power>
+      </x:expect>
+      <x:expect label="THEN output the total joltage" test="/power/@joltage = '357'"/>
+      <x:expect label="THEN output the joltage of the 1st bank" as="element(bank)" test="/power/bank[1]">
+        <bank joltage="98"/>
+      </x:expect>
+      <x:expect label="THEN output the joltage of the 2nd bank" as="element(bank)" test="/power/bank[2]">
+        <bank joltage="89"/>
+      </x:expect>
+      <x:expect label="THEN output the joltage of the 3rd bank" as="element(bank)" test="/power/bank[3]">
+        <bank joltage="78"/>
+      </x:expect>
+      <x:expect label="THEN output the joltage of the 4th bank" as="element(bank)" test="/power/bank[4]">
+        <bank joltage="92"/>
+      </x:expect>
+    </x:scenario>
+  </x:scenario>
+  
+  <x:scenario label="WHEN calling the function a:string-to-nums">
+    <x:call function="a:string-to-nums"></x:call>
+    <x:scenario label="GIVEN a single digit">
+      <x:call>
+        <x:param name="string" select="'3'"/>
+      </x:call>
+      <x:expect label="THEN return a single integer" select="3"/>
+    </x:scenario>
+    <x:scenario label="GIVEN multiple digits">
+      <x:call>
+        <x:param name="string" select="'19791203'"/>
+      </x:call>
+      <x:expect label="THEN return a sequence of integers" select="(1, 9, 7, 9, 1, 2, 0, 3)"/>
+    </x:scenario>
+  </x:scenario>
+  
+</x:description>
