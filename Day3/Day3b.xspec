@@ -4,18 +4,20 @@
   xmlns:xs="http://www.w3.org/2001/XMLSchema"
   xmlns:math="http://www.w3.org/2005/xpath-functions/math"
   xmlns:a="https://github.com/yamahito/AdventOfCode_2025"
-  stylesheet="Day3.xsl"
+  stylesheet="Day3b.xsl"
   run-as="external">
+  
+  <x:param name="input" select="(
+      '987654321111111',
+      '811111111111119',
+      '234234234234278',
+      '818181911112111'
+    )"/>
   
   <x:scenario label="WHEN calling the intial template">
     <x:call template="xsl:initial-template"/>
-    <x:scenario label="GIVEN the example input">
-      <x:param name="input" select="(
-          '987654321111111',
-          '811111111111119',
-          '234234234234278',
-          '818181911112111'
-        )"/>
+    <x:scenario label="GIVEN the example input with joltageDigits 2">
+      <x:param name="joltageDigits" select="2"/>
       <x:expect label="THEN output a power element with a joltage attribute">
         <power joltage="...">...</power>
       </x:expect>
@@ -31,6 +33,22 @@
       </x:expect>
       <x:expect label="THEN output the joltage of the 4th bank" as="element(bank)" test="/power/bank[4]">
         <bank joltage="92"/>
+      </x:expect>
+    </x:scenario>
+    <x:scenario label="GIVEN the example input with joltageDigits 12">
+      <x:param name="joltageDigits" select="12"/>
+      <x:expect label="THEN output the total joltage" test="/power/@joltage = '3121910778619'"/>
+      <x:expect label="THEN output the joltage of the 1st bank" as="element(bank)" test="/power/bank[1]">
+        <bank joltage="987654321111"/>
+      </x:expect>
+      <x:expect label="THEN output the joltage of the 2nd bank" as="element(bank)" test="/power/bank[2]">
+        <bank joltage="811111111119"/>
+      </x:expect>
+      <x:expect label="THEN output the joltage of the 3rd bank" as="element(bank)" test="/power/bank[3]">
+        <bank joltage="434234234278"/>
+      </x:expect>
+      <x:expect label="THEN output the joltage of the 4th bank" as="element(bank)" test="/power/bank[4]">
+        <bank joltage="888911112111"/>
       </x:expect>
     </x:scenario>
   </x:scenario>

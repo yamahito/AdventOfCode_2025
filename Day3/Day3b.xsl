@@ -9,6 +9,7 @@
   
   <xsl:param name="inputURL" select="'input.txt'"/>
   <xsl:param name="input" as="xs:string*" select="unparsed-text-lines($inputURL)"/>
+  <xsl:param name="joltageDigits" as="xs:integer" select="12"/>
   
   <xsl:output indent="yes"/>
   
@@ -18,18 +19,27 @@
     <xsl:variable name="banks" as="element(bank)*">
       <xsl:apply-templates select="$input"/>
     </xsl:variable>
-    <power joltage="{sum($banks/@joltage)}">
+    <power joltage="{sum($banks/@joltage/xs:integer(.))}">
       <xsl:sequence select="$banks"/>
     </power>
   </xsl:template>
   
   <xsl:template match=".[matches(., '(\d+){2,}')]">
     <xsl:variable name="nums" select="a:string-to-nums(.)" as="xs:integer+"/>
-    <xsl:variable name="firstnum" select="max($nums[not(position() eq last())])[1]" as="xs:integer"/>
-    <xsl:variable name="firstpos" select="index-of($nums, $firstnum)[1]" as="xs:integer"/>
-    <xsl:variable name="secondnums" select="subsequence($nums, $firstpos+1)" as="xs:integer+"/>
-    <xsl:variable name="secondnum" select="max($secondnums)[1]" as="xs:integer"/>
-    <bank joltage="{$firstnum}{$secondnum}"/>
+    <xsl:variable name="digits" as="xs:integer*">
+      <xsl:iterate select="reverse(1 to $joltageDigits)">
+        <xsl:param name="nums" select="$nums" as="xs:integer*"/>
+        <xsl:variable name="numSize" select="count($nums)" as="xs:integer"/>
+        <xsl:variable name="availableNums" select="subsequence($nums, 1, 1 + $numSize - .)"/>
+        <xsl:variable name="thisDigit" select="max($availableNums)[1]" as="xs:integer"/>
+        <xsl:variable name="thisPos" select="index-of($nums, $thisDigit)[1]" as="xs:integer"/>
+        <xsl:sequence select="$thisDigit"/>
+        <xsl:next-iteration>
+          <xsl:with-param name="nums" select="subsequence($nums, $thisPos + 1)"/>
+        </xsl:next-iteration>
+      </xsl:iterate>
+    </xsl:variable>
+    <bank joltage="{string-join($digits)}"/>
   </xsl:template>
   
   <xsl:function name="a:string-to-nums" as="xs:integer*" visibility="public">
