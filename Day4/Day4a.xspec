@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  xmlns:math="http://www.w3.org/2005/xpath-functions/math"
+  xmlns:a="https://github.com/yamahito/AdventOfCode_2025"
+  stylesheet="Day4a.xsl"
+  run-as="external">
+  
+  <x:param name="inputURL" select="'testInput.txt'"/>
+  
+  <x:scenario label="WHEN calling the intial template">
+    <x:call template="xsl:initial-template"/>
+    <x:expect label="THEN create a forklift grid plan indicating which rolls can be taken">
+      <grid available-rolls="13">
+        <row>
+          <empty/>
+          <empty/>
+          <roll available="yes"/>
+          <roll available="yes"/>
+          <empty/>
+          <roll available="yes"/>
+          <roll available="yes"/>
+          <roll/>
+          <roll available="yes"/>
+          <empty/>
+        </row>
+        <row>
+          <roll available="yes"/>
+          <roll/>
+          <roll/>
+          <empty/>
+          <roll/>
+          <empty/>
+          <roll/>
+          <empty/>
+          <roll/>
+          <roll/>
+        </row>
+        <row>
+          <roll/>
+          <roll/>
+          <roll/>
+          <roll/>
+          <roll/>
+          <empty/>
+          <roll available="yes"/>
+          <empty/>
+          <roll/>
+          <roll/>
+        </row>
+        <row>
+          <roll/>
+          <empty/>
+          <roll/>
+          <roll/>
+          <roll/>
+          <roll/>
+          <empty/>
+          <empty/>
+          <roll/>
+          <empty/>
+        </row>
+        <row>
+          <roll available="yes"/>
+          <roll/>
+          <empty/>
+          <roll/>
+          <roll/>
+          <roll/>
+          <roll/>
+          <empty/>
+          <roll/>
+          <roll available="yes"/>
+        </row>
+        <row>
+          <empty/>
+          <roll/>
+          <roll/>
+          <roll/>
+          <roll/>
+          <roll/>
+          <roll/>
+          <roll/>
+          <empty/>
+          <roll/>
+        </row>
+        <row>
+          <empty/>
+          <roll/>
+          <empty/>
+          <roll/>
+          <empty/>
+          <roll/>
+          <empty/>
+          <roll/>
+          <roll/>
+          <roll/>
+        </row>
+        <row>
+          <roll available="yes"/>
+          <empty/>
+          <roll/>
+          <roll/>
+          <roll/>
+          <empty/>
+          <roll/>
+          <roll/>
+          <roll/>
+          <roll/>
+        </row>
+        <row>
+          <empty/>
+          <roll/>
+          <roll/>
+          <roll/>
+          <roll/>
+          <roll/>
+          <roll/>
+          <roll/>
+          <roll/>
+          <empty/>
+        </row>
+        <row>
+          <roll available="yes"/>
+          <empty/>
+          <roll available="yes"/>
+          <empty/>
+          <roll/>
+          <roll/>
+          <roll/>
+          <empty/>
+          <roll available="yes"/>
+          <empty/>
+        </row>
+      </grid>
+    </x:expect>
+  </x:scenario>
+  
+</x:description>
