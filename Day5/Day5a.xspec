@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  xmlns:math="http://www.w3.org/2005/xpath-functions/math"
+  xmlns:a="https://github.com/yamahito/AdventOfCode_2025"
+  stylesheet="Day5a.xsl"
+  run-as="external">
+  
+  <x:param name="inputURL" select="'../testinput.txt'"/>
+  <x:param name="input" as="xs:string*" select="unparsed-text-lines($inputURL)"/>
+  
+  <x:scenario label="WHEN calling the initial template">
+    <x:call template="xsl:initial-template"/>
+    <x:scenario label="GIVEN the test input">
+      <x:expect label="THEN expect the following document">
+        <ingredients fresh="3">
+          <spoiled id="1"/>
+          <fresh id="5"/>
+          <spoiled id="8"/>
+          <fresh id="11"/>
+          <fresh id="17"/>
+          <spoiled id="32"/>
+        </ingredients>
+      </x:expect>
+    </x:scenario>
+  </x:scenario>
+  
+  <x:scenario label="WHEN calling function a:getRanges" catch="yes">
+    <x:call function="a:getRanges"/>
+    <x:scenario label="GIVEN the input strings">
+      <x:call>
+        <x:param name="in" select="$input"/>
+      </x:call>
+      <x:expect label="THEN output a sequence of arrays of all the ranges" select="([3, 5], [10, 14], [16, 20], [12, 18])"/>
+    </x:scenario>
+  </x:scenario>
+  
+  <x:scenario label="WHEN calling function a:isInRange" catch="yes">
+    <x:call function="a:isInRange">
+      <x:param name="ranges" select="([3, 5], [10, 14], [16, 20], [12, 18])"/>
+    </x:call>
+    <x:scenario label="GIVEN the input 17">
+      <x:call>
+        <x:param name="number" select="17"/>
+        <x:param name="ranges" select="([3, 5], [10, 14], [16, 20], [12, 18])"/>
+      </x:call>
+      <x:expect label="THEN return true" select="true()"/>
+    </x:scenario>
+    <x:scenario label="GIVEN the input 21">
+      <x:call>
+        <x:param name="number" select="21"/>
+        <x:param name="ranges" select="([3, 5], [10, 14], [16, 20], [12, 18])"/>
+      </x:call>
+      <x:expect label="THEN return false" select="false()"/>
+    </x:scenario>
+  </x:scenario>
+  
+</x:description>

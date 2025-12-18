@@ -10,7 +10,7 @@
                         <scenarioAssociation-array>
                             <scenarioAssociation>
                                 <field name="url">
-                                    <String>Day3/Day3b.xspec</String>
+                                    <String>Day1/Day1b.xspec</String>
                                 </field>
                                 <field name="scenarioIds">
                                     <list>
@@ -50,7 +50,7 @@
                             </scenarioAssociation>
                             <scenarioAssociation>
                                 <field name="url">
-                                    <String>Day1/Day1b.xspec</String>
+                                    <String>Day3/Day3b.xspec</String>
                                 </field>
                                 <field name="scenarioIds">
                                     <list>

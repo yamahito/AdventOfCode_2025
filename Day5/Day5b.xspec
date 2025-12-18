@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  xmlns:math="http://www.w3.org/2005/xpath-functions/math"
+  xmlns:a="https://github.com/yamahito/AdventOfCode_2025"
+  stylesheet="Day5b.xsl"
+  run-as="external"> 
+  
+  <x:param name="inputURL" select="'../testinput.txt'"/>
+  <x:param name="input" as="xs:string*" select="unparsed-text-lines($inputURL)"/>
+  
+  <x:scenario label="WHEN running the initial template">
+    <x:call template="xsl:initial-template"/>
+    <x:expect label="THEN output the following with a total of fresh ingredient IDs">
+      <fresh total="14"/>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="WHEN running the a:sumRanges function" catch="yes">
+    <x:call function="a:sumRanges"/>
+    <x:scenario label="GIVEN the sample ranges">
+      <x:call>
+        <x:param name="ranges" select="([3, 5], [10, 14], [16, 20], [12, 18])"/>
+      </x:call>
+      <x:expect label="THEN return the total unique numbers in all the ranges" select="14"/>
+    </x:scenario>
+    <x:scenario label="GIVEN a single range">
+      <x:call>
+        <x:param name="ranges" select="[3,5]"/>
+      </x:call>
+      <x:expect label="THEN return the total unique numbers in that range" select="3"/>
+    </x:scenario>
+  </x:scenario>
+  
+  <x:scenario label="WHEN running the a:simplifyRanges function">
+    <x:call function="a:simplifyRanges"/>
+    <x:scenario label="GIVEN the sample ranges">
+      <x:call>
+        <x:param name="ranges" select="([3, 5], [10, 14], [16, 20], [12, 18])"/>
+      </x:call>
+      <x:expect label="THEN return a simplified set representing the same ranges" select="([3,5], [10,20])"/>
+    </x:scenario>
+    <x:scenario label="GIVEN a new range">
+      <x:call>
+        <x:param name="ranges" select="([3,5])"/>
+      </x:call>
+      <x:expect label="THEN return the same range" select="([3,5])"/>
+    </x:scenario>
+    <x:scenario label="GIVEN a lower range">
+      <x:call>
+        <x:param name="ranges" select="[1,2]"/>
+        <x:param name="newRanges" select="([4,5], [10,12])"/>
+      </x:call>
+      <x:expect label="THEN return all ranges" select="([1,2], [4,5], [10,12])"/>
+    </x:scenario>
+    <x:scenario label="GIVEN a higher range">
+      <x:call>
+        <x:param name="ranges" select="[19,22]"/>
+        <x:param name="newRanges" select="([4,5], [10,12])"/>
+      </x:call>
+      <x:expect label="THEN return all ranges" select="([4,5], [10,12], [19,22])"/>
+    </x:scenario>
+    <x:scenario label="GIVEN a range that extends (upwards)">
+      <x:call>
+        <x:param name="ranges" select="[4,7]"/>
+        <x:param name="newRanges" select="([3,5], [10,12])"/>
+      </x:call>
+      <x:expect label="THEN return an extended range" select="([3,7], [10,12])"/>
+    </x:scenario>
+    <x:scenario label="GIVEN a range that extends (downwards)">
+      <x:call>
+        <x:param name="ranges" select="[7, 11]"/>
+        <x:param name="newRanges" select="([3,5], [10,12])"/>
+      </x:call>
+      <x:expect label="THEN return an extended range" select="([3,5], [7,12])"/>
+    </x:scenario>
+    <x:scenario label="GIVEN an adjacent lower range">
+      <x:call>
+        <x:param name="ranges" select="[7, 9]"/>
+        <x:param name="newRanges" select="([3,5], [10,12])"/>
+      </x:call>
+      <x:expect label="THEN return an extended range" select="([3,5], [7,12])"/>
+    </x:scenario>
+    <x:scenario label="GIVEN an adjacent higher range">
+      <x:call>
+        <x:param name="ranges" select="[6,7]"/>
+        <x:param name="newRanges" select="([3,5], [10,12])"/>
+      </x:call>
+      <x:expect label="THEN return an extended range" select="([3,7], [10,12])"/>
+    </x:scenario>
+    <x:scenario label="GIVEN a bridging range">
+      <x:call>
+        <x:param name="ranges" select="[4,11]"/>
+        <x:param name="newRanges" select="([3,5], [10,12])"/>
+      </x:call>
+      <x:expect label="THEN return an extended range" select="([3,12])"/>
+    </x:scenario>
+    <x:scenario label="GIVEN a bridging extending (down) range">
+      <x:call>
+        <x:param name="ranges" select="[2,11]"/>
+        <x:param name="newRanges" select="([3,5], [10,12])"/>
+      </x:call>
+      <x:expect label="THEN return an extended range" select="([2,12])"/>
+    </x:scenario>
+    <x:scenario label="GIVEN a bridging (up) range">
+      <x:call>
+        <x:param name="ranges" select="[4,13]"/>
+        <x:param name="newRanges" select="([3,5], [10,12])"/>
+      </x:call>
+      <x:expect label="THEN return an extended range" select="([3,13])"/>
+    </x:scenario>
+    <x:scenario label="GIVEN a larger range">
+      <x:call>
+        <x:param name="ranges" select="[2,13]"/>
+        <x:param name="newRanges" select="([3,5], [10,12])"/>
+      </x:call>
+      <x:expect label="THEN replace superceded ranges" select="([2,13])"/>
+    </x:scenario>
+    <x:scenario label="GIVEN a bridging adjacent">
+      <x:call>
+        <x:param name="ranges" select="[6,9]"/>
+        <x:param name="newRanges" select="([3,5], [10,12])"/>
+      </x:call>
+      <x:expect label="THEN return an extended range" select="([3,12])"/>
+    </x:scenario>
+    <x:scenario label="GIVEN a range inbetween existing ranges">
+      <x:call>
+        <x:param name="ranges" select="[7,8]"/>
+        <x:param name="newRanges" select="([3,5], [10,12])"/>
+      </x:call>
+      <x:expect label="THEN insert new ranges" select="([3,5], [7,8], [10,12])"/>
+    </x:scenario>
+  </x:scenario>
+  
+  <x:scenario label="WHEN running the a:findMaxRange function">
+    <x:call function="a:findMaxRange">
+      <x:param name="ranges" select="([3, 5], [10, 14], [16, 20], [12, 18])"/>
+    </x:call>
+    <x:expect label="THEN return the maximum integer across all ranges" select="20"/>
+  </x:scenario>
+  
+  <x:scenario label="WHEN running the a:findMinRange function">
+    <x:call function="a:findMinRange">
+      <x:param name="ranges" select="([3, 5], [10, 14], [16, 20], [12, 18])"/>
+    </x:call>
+    <x:expect label="THEN return the minimum integer across all ranges" select="3"/>
+  </x:scenario>
+
+</x:description>
