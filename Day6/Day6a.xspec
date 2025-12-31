@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  xmlns:math="http://www.w3.org/2005/xpath-functions/math"
+  xmlns:a="https://github.com/yamahito/AdventOfCode_2025"
+  stylesheet="Day6a.xsl"
+  run-as="external">
+  
+  <x:param name="inputURL" select="'../testinput.txt'"/>
+  <x:param name="input" as="xs:string*" select="unparsed-text-lines($inputURL)"/>
+  
+  <x:scenario label="WHEN calling the initial template">
+    <x:call template="xsl:initial-template"/>
+    <x:scenario label="GIVEN the test input">
+      <x:expect label="THEN output a homework element with @grand_total">
+        <homework grand_total="4277556">...</homework>
+      </x:expect>
+      <x:expect label="THEN output a multiply element for each multiply column" as="element(multiplication)" test="/homework/*[1]">
+        <multiplication product="33210">
+          <term>123</term>
+          <term>45</term>
+          <term>6</term>
+        </multiplication>
+      </x:expect>
+      <x:expect label="THEN output a add element for each sum column" as="element(addition)" test="/homework/*[4]">
+        <addition sum="401">
+          <term>64</term>
+          <term>23</term>
+          <term>314</term>
+        </addition> 
+      </x:expect>
+    </x:scenario>
+  </x:scenario>
+  
+</x:description>
